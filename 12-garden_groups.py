@@ -87,102 +87,102 @@ def region_price(grid, array):
     perimeter = 0
     for point in array:
         # Up
-        if point[0]-1 >= 0 and point[1] >= 0:
-            if grid[point[0]-1][point[1]] != grid[point[0]][point[1]] and grid[point[0]][point[1]-1] != grid[point[0]][point[1]]:
+        if point[0] == 0:
+            if point[1] == 0:
                 print('up')
                 perimeter += 1
-            if grid[point[0]-1][point[1]-1] == grid[point[0]][point[1]] and grid[point[0]][point[1]-1] == grid[point[0]][point[1]] and grid[point[0]-1][point[1]] != grid[point[0]][point[1]]:
-                print(point)
-                print('up')     
-                perimeter += 1
-        if point[0] == 0:
-            if point == [0, len(grid)-1] and grid[point[0]][point[1]-1] != grid[point[0]][point[1]]:
-                print(point)
-                print('up')     
-                perimeter += 1
-            if point[1] > 0:
+            else:
                 if grid[point[0]][point[1]-1] != grid[point[0]][point[1]]:
+                    print('up')     
+                    perimeter += 1
+        else:
+            # on first column
+            if point[1] == 0:
+                if grid[point[0]-1][point[1]] != grid[point[0]][point[1]]:
+                    print('up')
+                    perimeter += 1
+            # on following columns
+            else:
+                if grid[point[0]][point[1]-1] == grid[point[0]][point[1]] and grid[point[0]-1][point[1]-1] == grid[point[0]][point[1]] and grid[point[0]-1][point[1]] != grid[point[0]][point[1]]:
+                    print('up')     
+                    perimeter += 1
+                if grid[point[0]-1][point[1]] != grid[point[0]][point[1]] and grid[point[0]][point[1]-1] != grid[point[0]][point[1]]:
                     print(point)
                     print('up')
                     perimeter += 1
+        
+        # Down
+        if point[0] == len(grid)-1:
             if point[1] == 0:
-                print(point)
-                print('up')
-                perimeter += 1
+                print('down')
+                perimeter += 1 
+            else:
+                if grid[point[0]][point[1]-1] != grid[point[0]][point[1]]:
+                    print('down')
+                    perimeter += 1 
+        else:
+            # on first column
+            if point[1] == 0:
+                if grid[point[0]+1][point[1]] != grid[point[0]][point[1]]:
+                    print('down')
+                    perimeter += 1
+            # on following columns
+            else:
+                if grid[point[0]][point[1]-1] == grid[point[0]][point[1]] and grid[point[0]+1][point[1]-1] == grid[point[0]][point[1]] and grid[point[0]+1][point[1]] != grid[point[0]][point[1]]:
+                    print('down')
+                    perimeter += 1
+                if grid[point[0]+1][point[1]] != grid[point[0]][point[1]] and grid[point[0]][point[1]-1] != grid[point[0]][point[1]]:
+                    print('down')
+                    perimeter += 1
+
+  
         # Right
-        if point[1]+1 <= len(grid[0])-1 and point[0] >= 0:
-            if point == [0,0] and grid[point[0]][point[1]+1] != grid[point[0]][point[1]]:
+        if point[0] == 0: 
+            if point[1] == len(grid[0])-1: 
                 print('right')
                 perimeter += 1
-            if grid[point[0]][point[1]+1] != grid[point[0]][point[1]] and grid[point[0]-1][point[1]] != grid[point[0]][point[1]] :
-                print('right')
-                perimeter += 1
-            if grid[point[0]-1][point[1]+1] == grid[point[0]][point[1]] and grid[point[0]-1][point[1]] == grid[point[0]][point[1]] and grid[point[0]][point[1]+1] != grid[point[0]][point[1]] :
-                print('right')
-                perimeter += 1
-        if point[1] == len(grid[0])-1: 
-            if point[0] > 0:
+            else:
+                if grid[point[0]][point[1]+1] != grid[point[0]][point[1]]:
+                    print('right')
+                    perimeter += 1
+        else:
+            if point[1] == len(grid[0])-1:
                 if grid[point[0]-1][point[1]] != grid[point[0]][point[1]]:
                     print('right')
                     perimeter += 1
-            if point[0] == 0:
-                print('right')
-                perimeter += 1
-        # Down
-        if point[0]+1 <= len(grid)-1 and point[1] >= 0:
-            if point[0] == len(grid)-1 and grid[point[0]][point[1]-1] != grid[point[0]][point[1]]:
-                print('down')
-                perimeter += 1
-            if grid[point[0]+1][point[1]] != grid[point[0]][point[1]] and grid[point[0]][point[1]-1] != grid[point[0]][point[1]]:
-                print('down')
-                perimeter += 1
-            if grid[point[0]+1][point[1]-1] == grid[point[0]][point[1]] and grid[point[0]][point[1]-1] == grid[point[0]][point[1]] and grid[point[0]+1][point[1]] != grid[point[0]][point[1]]:
-                print('down')
-                perimeter += 1
-        if point[0] == len(grid)-1:
-            if point[1] > 0:
-                if grid[point[0]][point[1]-1] != grid[point[0]][point[1]]:
-                    print('down')
+            else:
+                if grid[point[0]-1][point[1]] == grid[point[0]][point[1]] and grid[point[0]-1][point[1]+1] == grid[point[0]][point[1]] and grid[point[0]][point[1]+1] != grid[point[0]][point[1]] :
+                    print('right')
+                    perimeter += 1   
+                if grid[point[0]][point[1]+1] != grid[point[0]][point[1]] and grid[point[0]-1][point[1]] != grid[point[0]][point[1]]:
+                    print('right')
                     perimeter += 1
-            if point[1] == 0:
-                print('down')
-                perimeter += 1    
+
         # Left
-        if point[1]-1 >= 0 and point[0] >= 0: 
-            if point[1] == 0 and grid[point[0]-1][point[1]] != grid[point[0]][point[1]]:
-                print(point)
-                perimeter += 1
-            if grid[point[0]][point[1]-1] != grid[point[0]][point[1]] and grid[point[0]-1][point[1]] != grid[point[0]][point[1]]:
+        if point[0] == 0:
+            if point[1] == 0: 
                 print('left')
-                print(point)
                 perimeter += 1
-            if grid[point[0]-1][point[1]-1] == grid[point[0]][point[1]] and grid[point[0]-1][point[1]] == grid[point[0]][point[1]] and grid[point[0]][point[1]-1] != grid[point[0]][point[1]]:
-                print('left')
-                print(point)
-                perimeter += 1
-        if point[1] == 0:
-            if point[0] > 0:
-                if grid[point[0]-1][point[1]] != grid[point[0]][point[1]]:
-                    print(point)
+            else:
+                if grid[point[0]][point[1]-1] != grid[point[0]][point[1]]:
                     print('left')
                     perimeter += 1
-            if point[0] == 0:
-                print('left')
-                print(point)
-                perimeter += 1
-                # if grid[point[0]-1][point[1]] != grid[point[0]][point[1]]:
-                #     print(point)
-                #     print('left')
-                #     perimeter += 1
-            # if point[0] == len(grid) - 1:
-            #     if grid[point[0]-1][point[1]] != grid[point[0]][point[1]]:
-            #         print('left')
-            #         print(point)
-            #         perimeter += 1
+        else:
+            if point[1] == 0:
+                if grid[point[0]-1][point[1]] != grid[point[0]][point[1]]:
+                    print('left')
+                    perimeter += 1
+            else:
+                if grid[point[0]-1][point[1]] == grid[point[0]][point[1]] and grid[point[0]-1][point[1]-1] == grid[point[0]][point[1]] and grid[point[0]][point[1]-1] != grid[point[0]][point[1]]:
+                    print('left')
+                    perimeter += 1         
+                if grid[point[0]][point[1]-1] != grid[point[0]][point[1]] and grid[point[0]-1][point[1]] != grid[point[0]][point[1]]:
+                    print('left')
+                    perimeter += 1
+
     
     print(f"perimeter: {perimeter}")
     print(array)
-    print(len(array))
     price = len(array)*perimeter
     return price
 
@@ -207,10 +207,6 @@ grid = [
     [3, 3, 3, 2]
 ]
 
-# regions = find_adjacent_regions(grid)
-# print("Adjacent regions with the same element:")
-# for region in regions:
-#     print(region)
 grid_sample = [
     ['O', 'O', 'O', 'O', 'O'],
     ['O', 'X', 'O', 'X', 'O'],
@@ -260,27 +256,8 @@ with open('12-gardengroups.txt', 'r') as file:
     content = file.read()
     grid = text_to_matrix(content)
     adj_reg_unfiltered = find_adjacent_regions(grid)
-    adj_reg = []
-    # for row in adj_reg_unfiltered:
-        # matrix = np.array(row)
-        # filtered_matrix = np.array([r for r in matrix if len(r) > 1])
-    filtered_matrix = [row for row in adj_reg_unfiltered if len(row) > 1]
-    adj_reg = filtered_matrix
+    # adj_reg = []
+    # filtered_matrix = [row for row in adj_reg_unfiltered if len(row) > 1]
+    # adj_reg = filtered_matrix
     total_regions_price = price_per_region(grid, adj_reg_unfiltered)
-    
-    # adj_reg = np.array(adj_reg)
-    adjacent_regions_size = count_elements(adj_reg)/2
-    numpy_grid = np.array(grid)
-    grid_size = numpy_grid.size
     print(total_regions_price)
-    # print(grid_size)
-    # print(adjacent_regions_size)
-    # total_single_plants_price = (grid_size - adjacent_regions_size/2) * 4
-    # print(total_single_plants_price)
-    # total_price = total_regions_price + total_single_plants_price
-    # print(total_price)
-    # # print(adj_reg)
-    # print(grid[127][92])
-    # print(grid[128][92])
-    # print(grid[129][40])
-    # print(grid[127][93])
