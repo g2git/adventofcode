@@ -185,33 +185,14 @@ with open('11-plutonianpebbles.txt', 'r') as file:
     numbers = [int(num) for num in array]
     nums = numbers.copy()
     nums_matrix = [[n] for n in nums]
-    # print(nums_matrix)
-
-    # Vectorize the custom function 
-    vectorized_function = np.vectorize(array_iteration) 
-    
-    # Apply the vectorized function to the large array 
-    # result = vectorized_function(nums)
-    # print(result)
-    # print(array_iteration(nums))
-    # for i in range(75):
-    #     print(i)
-    #     nums = vectorized_function(nums)
-    #     print(nums)
-    #     print(len(nums))
 
 
 # Create a NumPy array 
 numpy_array = np.array(nums) 
-# # Convert the NumPy array to a Dask array 
+# Convert the NumPy array to a Dask array 
 dask_array = da.from_array(numpy_array, chunks=(10**6,))
 
-# # Apply the custom function to the Dask array 
-# result = dask_array.map_blocks(array_iteration).compute()
-# print(result)
 
-# res = dask_array.map_blocks(nested_loop, 40).compute()
-# print(len(res))
 for i in range(76):
     res = count_elements_recursion(nums, i)
     print(f'res = {res}')

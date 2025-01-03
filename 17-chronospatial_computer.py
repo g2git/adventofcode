@@ -6,51 +6,6 @@ register_B = 0
 register_C = 0
 _array = []
 
-# register_A = 52884621
-# register_B = 826324
-# register_C = 826322
-# _array = []   
-
-# register_A = 6610577
-# register_B = 826321
-# register_C = 826322
-# _array = [1]
-
-# register_A = 826322
-# register_B = 826324
-# register_C = 826322
-# _array = [1,4]
-
-# register_A = 103290
-# register_B = 826321
-# register_C = 826322
-# _array = [1,4,1]  
-
-# register_A = 12911
-# register_B = 826324
-# register_C = 826322
-# _array = [1,4,1,4]
-
-# register_A = 1613
-# register_B = 826321
-# register_C = 826322
-# _array = [1,4,1,4,1]
-
-# register_A = 201
-# register_B = 826324
-# register_C = 826322
-# _array = [1,4,1,4,1,4]
-
-# register_A = 25
-# register_B = 826321
-# register_C = 826322
-# _array = [1,4,1,4,1,4,1]
-
-# register_A = 3
-# register_B = 826324
-# register_C = 826322
-# _array = [1,4,1,4,1,4,1,4]
-
 def adv(operand):
     global register_A
     global register_B
@@ -69,7 +24,7 @@ def adv(operand):
 
 def bxl(operand):
     global register_B
-    register_B = register_B ^ operand
+    register_B = int(register_B) ^ operand
     
 def bst(operand):
     global register_A
@@ -121,7 +76,7 @@ def out(operand):
         pass
     else:
         _array.append(operand % 8)
-    # print(_array)
+
         
 
 def bdv(operand):
@@ -190,90 +145,51 @@ def equation(x):
     division_result = x // (2 ** xor_value)
     return ((xor_value ^ division_result) ^ 5) % 8
 
-# register_A = 729
-# register_B = 0
-# register_C = 0
-# _array = []
-# program = [0,1,5,4,3,0]
+   
+def custom_range(start, end):
+    current = start
+    while current < end:
+        yield current
+        if current % 8 == 7:
+            current += 1
+        elif current % 8 == 5:
+            current += 2
+        elif current % 8 == 0:
+            current += 5
+        else:
+            current += 1
+
 
 program = [2,4,1,3,7,5,4,7,0,3,1,5,5,5,3,0]
-# program = [2,4,1,3,7,5,4,7]
-# program = [0,3,1,5,5,5,3,0]
-# program = [0,3,1,5,5,5]
-# print(52884621 % 8)
-# print(5 ^ 3)
-# print(math.trunc(52884621 / (2**6)))
-# print(6 ^ 826322)
-# print(2024 ^ 43690)
-# print(math.trunc(52884621 / (2**3)))
-# print(826324 ^ 5)
-# print(826321 % 8)
-# print(math.trunc(6610577 / (2**3)))
-# print(826321 ^ 5)
-# print(826324 % 8)
-# print(math.trunc(826322 / (2**3)))
-# print(826324 ^ 5)
-# print(826321 % 8)
-# print(math.trunc(103290 / (2**3)))
-# print(826324 ^ 5)
-# print(826321 % 8)
-# print(math.trunc(25 / (2**3)))
-# print(math.trunc(3 / (2**3)))
 
-# print(f'register A: {register_A}')
-# print(f'register B: {register_B}')
-# print(f'register C: {register_C}')
-
-# instruction_pointer(program)
-# print(f'register A: {register_A}')
-# print(f'register B: {register_B}')
-# print(f'register C: {register_C}')
-# string_integer = ''.join([str(num) for num in _array])
-# print(string_integer)
-
-#234170206912512
-#16 digits starts at: 35184372088832
-# 216185320792792
-# 210018766053055
-# 215011648691904
+# 16 digits starts at: 35184372088832
+# 17 digits starts at: 281474976710656
 
 
-for i in range(216000000000000, 10**15):
-    # print(i)
+# for i in custom_range(216133641560349, 281474976710656):
+for i in range(236555997372013, 281474976710656, 10**0):
+# for i in custom_range(218332649226240, 281474976710656):
+
+    print(i)
+#     # if i % 8 == 7 or i % 8 == 5 or i % 8 == 0:
     register_A = i
     register_B = 0
     register_C = 0
     _array = []
+    instruction_pointer(program)
+    print(_array)
+    
+    # result = ''.join(map(str, _array[-16:]))
+    # if result == '2413754703155530':
+    #     sys.exit()
 
-    if equation(i) == 2 and equation(math.trunc(i/(2**3))) == 4 and equation(math.trunc(math.trunc(i/(2**3))/(2**3))) == 1 and equation(math.trunc(math.trunc(math.trunc(i/(2**3))/(2**3))/(2**3))) == 3 and equation(math.trunc(math.trunc(math.trunc(math.trunc(i/(2**3))/(2**3))/(2**3))/(2**3))) == 7 and equation(math.trunc(math.trunc(math.trunc(math.trunc(math.trunc(i/(2**3))/(2**3))/(2**3))/(2**3))/(2**3))) == 5 and equation(math.trunc(math.trunc(math.trunc(math.trunc(math.trunc(math.trunc(i/(2**3))/(2**3))/(2**3))/(2**3))/(2**3))/(2**3))) == 4 and equation(math.trunc(math.trunc(math.trunc(math.trunc(math.trunc(math.trunc(math.trunc(i/(2**3))/(2**3))/(2**3))/(2**3))/(2**3))/(2**3))/(2**3))) == 7 and equation(math.trunc(math.trunc(math.trunc(math.trunc(math.trunc(math.trunc(math.trunc(math.trunc(i/(2**3))/(2**3))/(2**3))/(2**3))/(2**3))/(2**3))/(2**3))/(2**3))) == 0:
-        print(i)
-        instruction_pointer(program)
-        print(len(_array))
-        print(_array)
-        if _array == program:
-            print(f'register A =  {register_A}')
-            break
-#     # sys.exit()
-#     # if _array == program:
-#     if _array[15] == 0 and _array[14] == 3 and _array[13] == 5 and _array[12] == 5 and _array[11] == 5 and _array[10] == 1 and _array[9] == 3 and _array[9] == 0:
-#         print(f'register A =  {register_A}')
-#         # break
-
-# register_A = 216185297098880
-# register_B = 0
-# register_C = 0
-# _array = []
-
-# print(register_A)
-# instruction_pointer(program)
-# print(len(_array))
-# print(_array)
-
-
-# Try values of x from 0 to 255 to find the solution
-# solutions = []
-# for x in range(35184372088832, 10**15):
-#     if equation(x) == 2:
-#         solutions.append(x)
-
-# print(solutions)
+    # if equation(i) == 2 and equation(math.trunc(i/(2**3))) == 4 and equation(math.trunc(math.trunc(i/(2**3))/(2**3))) == 1 and equation(math.trunc(math.trunc(math.trunc(i/(2**3))/(2**3))/(2**3))) == 3 and equation(math.trunc(math.trunc(math.trunc(math.trunc(i/(2**3))/(2**3))/(2**3))/(2**3))) == 7 and equation(math.trunc(math.trunc(math.trunc(math.trunc(math.trunc(i/(2**3))/(2**3))/(2**3))/(2**3))/(2**3))) == 5 and equation(math.trunc(math.trunc(math.trunc(math.trunc(math.trunc(math.trunc(i/(2**3))/(2**3))/(2**3))/(2**3))/(2**3))/(2**3))) == 4 and equation(math.trunc(math.trunc(math.trunc(math.trunc(math.trunc(math.trunc(math.trunc(i/(2**3))/(2**3))/(2**3))/(2**3))/(2**3))/(2**3))/(2**3))) == 7 and equation(math.trunc(math.trunc(math.trunc(math.trunc(math.trunc(math.trunc(math.trunc(math.trunc(i/(2**3))/(2**3))/(2**3))/(2**3))/(2**3))/(2**3))/(2**3))/(2**3))) == 0:
+    #     print(i)
+    #     instruction_pointer(program)
+    #     print(len(_array))
+    #     print(_array)
+    if _array == program:
+        print(f'register A =  {register_A}')
+        sys.exit()
+        break
+        
