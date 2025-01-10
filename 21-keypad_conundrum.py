@@ -1,5 +1,6 @@
-# from collections import deque
 from collections import deque, defaultdict
+from itertools import product
+from functools import cache
 import sys
 
 maze1= [
@@ -123,29 +124,6 @@ def all_shortest_paths_in_maze(maze, start, end):
     # Convert paths to strings
     return [''.join(path[::-1])+'A' for path in all_paths]
 
-# Example usage:
-
-# Maze representation
-# S = Start, E = End, # = Wall, . = Open space
-# maze = [
-#     "#########",
-#     "#S......#",
-#     "#.######.",
-#     "#.......#",
-#     "#.#####.#",
-#     "#.......E",
-#     "#########"
-# ]
-
-# start = (3, 1)  # Starting position (row, col)
-# end = (5, 7)    # Ending position (row, col)
-
-# Call the function
-# result = all_shortest_paths_in_maze(maze, start, end)
-# for path in result:
-#     print(path)  # Output will be all possible shortest paths
-
-
 
 def find_element(matrix, element):
     for i in range(len(matrix)):
@@ -191,121 +169,103 @@ def shortest_string(array):
     # Collect all strings of the shortest length
     shortest_strings = [s for s in array if len(s) == min_length]
     return shortest_strings
-
-def multiple_robots_press_buttons(maze1, maze2, instructions):
-    tot = 0
-    for inst in instructions:
-        print(inst)
-        num = extract_integer_part(inst)
-        rob = all_press_buttons(maze1, [inst])
-        for i in range(25):
-            print(i)
-            ss = shortest_string(rob)
-            rob = all_press_buttons(maze2, ss)
     
-        short_string = min(rob, key=len) 
-        length_of_shortest_string = len(short_string)
-        tot += num * length_of_shortest_string
-    return tot
-
-def buttons_recursion(maze1, maze2, instructions, iterations, first=True):
-    arr = []
-    paths =['']
-    path = '' 
-    # print(iterations)
-    if iterations > 0:
-        # print(instructions)
-        # instructions = shortest_string(instructions)
-        for index, ins in enumerate(instructions):
-            ins = 'A' + ins
-            if first:
-                for i in range(len(ins)-1):
-                    start = find_element(maze1, ins[i])
-                    end = find_element(maze1, ins[i+1])
-                    pressed_buttons = buttons_recursion(maze1, maze2, all_shortest_paths_in_maze(maze1, start, end), iterations-1, False)
-                # pressed_buttons = buttons_recursion(maze1, maze2, all_press_buttons(maze1, instructions), iterations-1, False)
-                    # new_paths = []
-                    # for p in paths:
-                    #     sp = [p + pb for pb in pressed_buttons]
-                    #     for s in sp:
-                    #         print(s)
-                    #         new_paths.append(s)
-                    # paths = new_paths
-                    path += min(pressed_buttons, key=len)
-                    # print(path)
-                # print(pressed_buttons)
-                return(path)
-                # return min(paths, key=len)
-
-            else:
-                for i in range(len(ins)-1):
-                    start = find_element(maze2, ins[i])
-                    end = find_element(maze2, ins[i+1])
-                    pressed_buttons = buttons_recursion(maze1, maze2, all_shortest_paths_in_maze(maze2, start, end), iterations-1, False)
-                    pressed_buttons = min(pressed_buttons, key=len)
-                    new_paths = []
-                    for p in paths:
-                        sp = [p + pb for pb in pressed_buttons]
-                        for s in sp:
-                            new_paths.append(s)
-                    paths = new_paths
-                    paths = shortest_string(paths)
-                    # paths = list(set(paths))
-                    print(paths)
-                    # print(pressed_buttons)
-                    # sys.exit()
-                # instructions = shortest_string(instructions)
-                # pressed_buttons = buttons_recursion(maze1, maze2, all_press_buttons(maze2, instructions), iterations-1, False)
-                    # paths = for p in pressed_buttons]
-                for p in paths:   
-                    arr.append(p)
-                # arr.append(pressed_buttons)
-                if index == len(instructions) - 1:
-                    return shortest_string(arr)
-                # return pressed_buttons
-            
-    else:
-        # print(instructions)
-        return shortest_string(instructions)
-   
     
-# Example usage:
-
-# Maze representation
-# S = Start, E = End, # = Wall, . = Open space
-# maze = [
-#     "#########",
-#     "#.......#",
-#     "#.######.",
-#     "#...S...#",
-#     "#.#####.#",
-#     "#.......E",
-#     "#########"
-# ]
-
-# start = (5, 8)  # Starting position (row, col)
-# end = (3, 4)    # Ending position (row, col)
-
-# # Call the function
-# result = shortest_path_in_maze(maze, start, end)
-# print(result)  # Output will be a string of directions
 instructions = ['341A','083A','802A','973A','780A']
-tot = 0
-for inst in instructions:
-    num = extract_integer_part(inst)
-    # print(inst)
-    # print(buttons_recursion(maze1, maze2, [inst], 3))
-    # print(inst)
-    # length_of_shortest_string = len(buttons_recursion(maze1, maze2, [inst], 3))
+# tot = 0
+# for inst in instructions:
+#     num = extract_integer_part(inst)
 #     ss = shortest_string(rob)
 #     rob1 = all_press_buttons(maze2, ss)
 #     ss = shortest_string(rob1)
 #     rob2 = all_press_buttons(maze2, ss)
-#     print(rob2)
  
 #     short_string = min(rob2, key=len) 
 #     length_of_shortest_string = len(short_string)
     # tot += num * length_of_shortest_string
 # print(tot)
-print(buttons_recursion(maze1, maze2, ['973A'], 3))
-# print(len(['<vA<AA>>^AvAA<^A>A<v<A>>^AvA^A<vA>^A<v<A>^A>AAvA^A<v<A>A>^AAAvA<^A>A'][0]))
+
+
+# New approach
+def compute_seqs(keypad):
+    # Create a dictionary for all keypad buttons as keys and their coordinate positions as values
+    pos = {}
+    for r in range(len(keypad)):
+        for c in range(len(keypad[r])):
+            if keypad[r][c] is not None: pos[keypad[r][c]] = (r, c)
+    # Create a dictionary with the tuple of two keypad buttons (x, y) as keys and the minimum moves needed to go from one button to the other
+    seqs = {}
+    for x in pos:
+        for y in pos:
+            if x == y:
+                seqs[(x, y)] = ["A"]
+                continue
+            # Create a list of all shortest moves from button x to button y and store the list in seqs as value for key (x, y)
+            possibilities = []
+            optimal_lentgth = float('inf')
+            q = deque([(pos[x], "")])
+            while q:
+                (r, c), moves = q.popleft()
+                for nr, nc, nm in [(r-1, c, "^"), (r+1, c, "v"), (r, c+1, ">"), (r, c-1, "<")]:
+                    if nr < 0 or nr >= len(keypad) or nc < 0 or nc >= len(keypad[0]): continue
+                    if keypad[nr][nc] is None: continue
+                    
+                    # If destination is reached
+                    if keypad[nr][nc] == y:
+                        # Algorithm will find all shortest paths first,
+                        # if the pathlength is larger than the shortest path then break out of the loop because the algorithm has finished finding all the shortest paths.
+                        if optimal_lentgth < len(moves+nm): break
+                        optimal_lentgth = len(moves+nm)
+                        possibilities.append(moves+nm+"A")
+                    else:
+                        # Append the new position and the moves required to get there to the queue list
+                        q.append(((nr, nc), moves + nm))
+                else:
+                    continue
+                break
+            seqs[(x,y)] = possibilities
+    return seqs 
+
+def solve(string, keypad):
+    seqs = compute_seqs(keypad)
+    options = [seqs[(x, y)] for x, y in zip("A" + string, string)]
+    # Return Cartesian product from all possible combinations
+    # *options makes all elements in options array a seperate input 
+    return ["".join(x) for x in product(*options)]
+
+number_keypad = [
+    ["7", "8", "9"],
+    ["4", "5", "6"],
+    ["1", "2", "3"],
+    [None, "0", "A"]
+]
+direction_keypad = [
+    [None, "^", "A"],
+    ["<", "v", ">"]
+]
+
+number_sequences = compute_seqs(number_keypad)
+direction_sequences = compute_seqs(direction_keypad)
+direction_seqs_len = {key: len(value[0]) for key, value in direction_sequences.items()}
+
+# Store all function outputs in memory to avoid repetitive calculations using cache
+@cache
+def compute_length(seq, depth=25):
+    if depth == 1:
+        return sum(direction_seqs_len[x, y] for x, y in zip("A" + seq, seq))
+    length = 0
+    for x, y in zip("A" + seq, seq):
+        # For all x to y i.e the entire sequence, determine which subsequence of button x to button y is the shortest and add it to length
+        length += min(compute_length(subseq, depth-1) for subseq in direction_sequences[(x, y)])
+    return length
+
+total = 0
+for ins in instructions:
+    # Get all shortest moves possible for the string
+    inputs = solve(ins, number_keypad)
+    # Get the shortest from the inputs moves at depth 25
+    min_len = min(map(compute_length, inputs))
+    # Calculate total
+    total += min_len * int(ins[:-1])
+    
+print(total)

@@ -1,6 +1,7 @@
 import numpy as np 
 import dask.array as da
 import json
+from functools import cache
 
 def text_to_matrix(text):
     # Split the text into lines
@@ -193,9 +194,9 @@ numpy_array = np.array(nums)
 dask_array = da.from_array(numpy_array, chunks=(10**6,))
 
 
-for i in range(76):
-    res = count_elements_recursion(nums, i)
-    print(f'res = {res}')
+# for i in range(76):
+#     res = count_elements_recursion(nums, i)
+#     print(f'res = {res}')
 
 
 
@@ -211,5 +212,13 @@ for i in range(76):
 #     json.dump(unique_data, file, indent=4)
 
 
-    
-    
+# New approach
+@cache
+def calculate_length(peebles, depth = 75):
+    if depth == 1:
+        return sum(len(apply_rules(peb)) for peb in peebles)
+    length = sum(calculate_length(tuple(apply_rules(peb)), depth-1) for peb in peebles)
+    return length
+
+
+print(calculate_length(tuple(numbers)))

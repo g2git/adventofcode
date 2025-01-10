@@ -112,9 +112,7 @@ with open('20-racecondition.txt', 'r') as file:
    # maze = replace_element(maze, ".", 0)
    # maze = replace_element(maze, "S", 0)
    # maze = replace_element(maze, "E", 0)
-   # print(maze)
-   # original_path_length = len(bfs(maze,start,end))
-   # print(original_path_length)
+
    original_path_length = len(find_all_shortest_paths(maze, start, end)[0])
 
    tot = 0
@@ -129,3 +127,64 @@ with open('20-racecondition.txt', 'r') as file:
                   tot += 1
             maze[i][j] = 1
    print(tot)
+   
+   
+# New approach   
+with open('20-racecondition.txt', 'r') as file:
+    maze = []
+    for line in file:
+        maze.append(list(line.strip()))
+    rows = len(maze)
+    cols = len(maze[0])
+    for r in range(rows):
+        for c in range(cols):
+            if maze[r][c] == "S":
+                break
+        else:
+            continue
+        break
+     
+     
+    # Distances matrix
+    dists = [[-1] * cols for _ in range(rows)]
+    dists[r][c] = 0
+   
+    # Bfs method
+    # q = deque([(r,c)])
+    # while q:
+    #     # Current row and current column
+    #     cr, cc = q.popleft()
+    #     for nr, nc in [(cr+1,cc), (cr-1, cc), (cr, cc+1), (cr, cc-1)]:
+    #         # check if nr, nc are within bounds
+    #         if nr < 0 or nc < 0 or nr >= rows or nc >= cols: continue
+    #         if maze[nr][nc] == "#": continue
+    #         if dists[nr][nc] != -1: continue
+    #         dists[nr][nc] = dists[cr][cc] + 1
+    #         q.append((nr, nc))
+    # Use this method because there is just one optimal path
+    while maze[r][c] != "E":
+        # Check all directions
+        for nr, nc in [(r+1, c), (r-1, c), (r, c+1), (r, c-1)]:
+            if nr < 0 or nr >= rows or nc < 0  or nc >= cols: continue
+            if maze[nr][nc] == "#": continue
+            if dists[nr][nc] != -1: continue
+            # For each point save how many steps to that point
+            dists[nr][nc] = dists[r][c] + 1
+            r, c = nr, nc
+    # Get all points for which a cheat to that point saves 100 picoseconds or more
+    count = 0
+    for r in range(rows):
+        for c in range(cols):
+            if maze[r][c] == "#": continue
+            for radius in range(2,21):
+                # check all points in with manhattan distance equal to radius
+                for dr in range(radius + 1):
+                    dc = radius - dr
+                    for nr, nc in {(r+dr, c+dc), (r+dr,c-dc), (r-dr,c+dc), (r-dr, c-dc)}:
+                        # Check bounds
+                        if nr < 0 or nr >= rows or nc < 0  or nc >= cols: continue
+                        # if dists[nr][nc] == -1: continue # Works too
+                        if maze[nr][nc] == "#": continue
+                        if dists[r][c] - dists[nr][nc] >= 100 + radius: count += 1
+   
+    print(count)
